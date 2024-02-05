@@ -1,6 +1,7 @@
 .card{
     color: aliceblue;
     background-color: rgba(0, 0, 0, 0.582);
+    box-shadow: 0 0 10px rgb(0, 0, 0);
 }
 
 .mb-2 input{
@@ -13,6 +14,6 @@
     color: white;
 }
 
-::placeholder{
-    color: rgba(255, 255, 255, 0.603);
+.mb2::placeholder{
+    color: rgb(255, 255, 255);
 }
