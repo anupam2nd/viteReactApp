@@ -1,23 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Form.css";
+import { register, login } from "../../apis/api";
 
 export default function Form({ value }) {
-  let isRegister = false;
-  if (value.header == "Register") {
-    isRegister = true;
-  }
+  const [isRegister, setIsRegister] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleOnSubmit = (event) => {
+    event.preventDefault();
+    console.log(formData, { isRegister });
+
+    isRegister == true
+      ? register(formData)
+          .then((res) => {
+            console.log(res);
+            setFormData({ name: "", email: "", password: "" });
+          })
+          .catch((error) => console.log(error))
+      : login(formData)
+          .then((res) => {
+            console.log(res);
+            setFormData({ name: "", email: "", password: "" });
+          })
+          .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    if (value.header === "Login") {
+      setIsRegister(false);
+    } else if (value.header === "Register") {
+      setIsRegister(true);
+    }
+  }, [value.header]);
 
   return (
     <div className="form-layout mt-5 p-5">
       <div className="card p-4 col-md-4 col-12 mx-auto">
         <p className="lead text-light text-center fs-2">{value.header}</p>
-        <form>
+        <form onSubmit={handleOnSubmit}>
           {isRegister && (
             <div className="mb-2">
               <label htmlFor="name" className="form-label">
                 Name
               </label>
-              <input type="text" placeholder="name" className="form-control" />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                placeholder="name"
+                className="form-control"
+                onChange={handleOnChange}
+              />
             </div>
           )}
 
@@ -26,10 +68,12 @@ export default function Form({ value }) {
               Email
             </label>
             <input
+              name="email"
               type="text"
+              value={formData.email}
               placeholder="Email"
               className="form-control"
-              name="email"
+              onChange={handleOnChange}
             />
           </div>
 
@@ -38,17 +82,19 @@ export default function Form({ value }) {
               Password
             </label>
             <input
+              name="password"
               type="password"
+              value={formData.password}
               placeholder="password"
               className="form-control"
-              name="password"
+              onChange={handleOnChange}
             />
           </div>
 
-          {isRegister && (
+          {/* {isRegister && (
             <div className="mb-2">
               <label htmlFor="confirm-password" className="form-label">
-                Password
+                Confirm Password
               </label>
               <input
                 type="password"
@@ -57,9 +103,11 @@ export default function Form({ value }) {
                 name="confirm_password"
               />
             </div>
-          )}
+          )} */}
           <div className="d-flex justify-content-end">
-            <button className="btn btn-primary mt-2">{value.btn} </button>
+            <button type="submit" className="btn btn-primary mt-2">
+              {value.btn}{" "}
+            </button>
           </div>
         </form>
       </div>
