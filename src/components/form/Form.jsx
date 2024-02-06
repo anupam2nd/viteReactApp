@@ -9,6 +9,7 @@ export default function Form({ value }) {
     email: "",
     password: "",
   });
+  const [isEmptyInput, setIsEmptyInput] = useState(false)
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
@@ -19,19 +20,20 @@ export default function Form({ value }) {
     event.preventDefault();
     console.log(formData, { isRegister });
 
-    isRegister == true
-      ? register(formData)
-          .then((res) => {
-            console.log(res);
-            setFormData({ name: "", email: "", password: "" });
-          })
-          .catch((error) => console.log(error))
-      : login(formData)
-          .then((res) => {
-            console.log(res);
-            setFormData({ name: "", email: "", password: "" });
-          })
-          .catch((error) => console.log(error));
+    const isEmptyInput = Object.values(formData).every(e => e == '')
+    
+    useEffect(() => {
+      isEmptyInput ? setIsEmptyInput(true) : setIsEmptyInput(false);
+    }, isEmptyInput)
+
+    // isRegister == true
+    //   ? register(formData)
+    //       .then((res) => {
+    //         console.log(res);
+    //         setFormData({ name: "", email: "", password: "" });
+    //       })
+    //       .catch((error) => console.log(error))
+    //   : console.log('login');
   };
 
   useEffect(() => {
@@ -41,6 +43,22 @@ export default function Form({ value }) {
       setIsRegister(true);
     }
   }, [value.header]);
+
+  const handleLogin = () => {
+    if(isRegister == 'Login'){
+      delete formData.name;
+      let logInData = formData;
+      // const emptyInput = Object.values(formData).every(e => e == '');
+    }
+
+
+    // login(formData)
+    //       .then((res) => {
+    //         console.log(res);
+    //         setFormData({ name: "", email: "", password: "" });
+    //       })
+    //       .catch((error) => console.log(error));
+  }
 
   return (
     <div className="form-layout mt-5 p-5">
