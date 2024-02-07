@@ -4,6 +4,7 @@ import { getUser } from "../../apis/api";
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
+  const [adminUser, setAdminUser] = useState("");
 
   useEffect(() => {
     getUser()
@@ -11,12 +12,19 @@ export default function Admin() {
       .catch((err) => {
         console.log(err);
       });
+
+    let name;
+    if (localStorage.getItem("user")) {
+      name = localStorage.getItem("user");
+    }
+
+    setAdminUser(name);
   }, []);
 
   console.log(users);
   return (
     <>
-      <h4 className="display-4 text-center">Admin Content</h4>
+      <h4 className="display-4 text-center">{adminUser != "" && adminUser}</h4>
       <div className="user-list col-md-5 mx-auto m-3">
         <ul className="list-group text-dark">
           {users.length > 0 &&
