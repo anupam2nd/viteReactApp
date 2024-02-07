@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Form.css";
 import { register, login } from "../../apis/api";
+import sha256 from "sha256";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Form({ value }) {
   const [isRegister, setIsRegister] = useState(false);
@@ -9,9 +11,12 @@ export default function Form({ value }) {
     email: "",
     password: "",
   });
-  const [isEmptyInput, setIsEmptyInput] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleOnChange = (event) => {
+    if (event.target.name == "password") {
+    }
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -19,26 +24,7 @@ export default function Form({ value }) {
   const handleOnSubmit = (event) => {
     event.preventDefault();
 
-    let isFieldEmpty = !Object.values(formData).some((ele) => ele == "");
-    console.log(isFieldEmpty);
-    // if (isFieldEmpty) {
-    //   alert("Field cannot be empty!");
-    //   return;
-    // }
-
-    // isRegister == true
-    //   ? register(formData)
-    //       .then((res) => {
-    //         console.log(res);
-    //         setFormData({ name: "", email: "", password: "" });
-    //       })
-    //       .catch((error) => console.log(error))
-    //   : login(formData)
-    //       .then((res) => {
-    //         console.log(res);
-    //         setFormData({ name: "", email: "", password: "" });
-    //       })
-    //       .catch((error) => console.log(error));
+    isRegister == true ? handleRegister(formData) : handleLogin(formData);
   };
 
   useEffect(() => {
@@ -49,19 +35,44 @@ export default function Form({ value }) {
     }
   }, [value.header]);
 
-  const handleLogin = () => {
-    if (isRegister == "Login") {
-      delete formData.name;
-      let logInData = formData;
-      // const emptyInput = Object.values(formData).every(e => e == '');
+  const handleRegister = (data) => {
+    data.password = sha256(data.password);
+    if (checkFieldEmptyFn(data)) {
+      register(data)
+        .then((res) => {
+          if (res.data == "Success") {
+            alert("Registration Success!");
+          }
+          setFormData({ name: "", email: "", password: "" });
+        })
+        .catch((error) => console.log(error));
+    } else {
+      return alert("Field Cannot Be Empty!");
     }
+  };
 
-    // login(formData)
-    //       .then((res) => {
-    //         console.log(res);
-    //         setFormData({ name: "", email: "", password: "" });
-    //       })
-    //       .catch((error) => console.log(error));
+  const handleLogin = (data) => {
+    delete data.name;
+    data.password = sha256(data.password);
+    if (checkFieldEmptyFn(data)) {
+      login(formData)
+        .then((res) => {
+          console.log(res);
+          if (res.data == "success") {
+            alert("Login Success");
+            navigate("/admin", { replace: true });
+          }
+          setFormData({ name: "", email: "", password: "" });
+        })
+        .catch((error) => console.log(error));
+    } else {
+      return alert("Field Cannot Be Empty!");
+    }
+  };
+
+  const checkFieldEmptyFn = (formField) => {
+    const isFormFilled = Object.values(formField).every((ele) => ele !== "");
+    return isFormFilled;
   };
 
   return (

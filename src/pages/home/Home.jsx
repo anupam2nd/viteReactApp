@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
+import sha256 from "sha256";
 import "./Home.css";
 import { getUser } from "../../apis/api";
 
 export default function Home() {
   const [users, setUsers] = useState({});
+  let str = "Hello";
+  const eStr = sha256(str);
+  console.log(eStr);
+
+  console.log(eStr === sha256("Hello"));
 
   useEffect(() => {
     console.log("home component");

@@ -5,6 +5,8 @@ import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
 import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
+import Admin from "../pages/admin/Admin";
+import Dashboard from "../pages/dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,16 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard />,
+          },
+        ],
       },
     ],
   },
