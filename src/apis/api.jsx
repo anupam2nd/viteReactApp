@@ -13,7 +13,7 @@ export const getUser = async () => {
 
 export const register = async (data) => {
   try {
-    const response = await axios.post(`${url}/users`, data);
+    const response = await axios.post(`${url}/users/register`, data);
     return response;
   } catch (error) {
     throw new Error("Error in Registering!");
@@ -22,7 +22,7 @@ export const register = async (data) => {
 
 export const login = async (data) => {
   try {
-    const response = await axios.post(`${url}/users`, data);
+    const response = await axios.post(`${url}/users/login`, data);
     return response;
   } catch (error) {
     return error;
