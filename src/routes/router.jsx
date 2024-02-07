@@ -7,6 +7,7 @@ import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
 import Admin from "../pages/admin/Admin";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Protected from "../components/protected/Protected";
 
 const router = createBrowserRouter([
   {
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <Admin />,
+        element: <Protected Component={Admin} />,
         children: [
           {
             path: "dashboard",

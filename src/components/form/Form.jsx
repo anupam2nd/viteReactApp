@@ -57,8 +57,9 @@ export default function Form({ value }) {
     if (checkFieldEmptyFn(data)) {
       login(formData)
         .then((res) => {
-          console.log(res);
-          if (res.data == "success") {
+          console.log(res.data);
+          localStorage.setItem("user", res.data.user);
+          if (res.data.msg == "Success") {
             alert("Login Success");
             navigate("/admin", { replace: true });
           }
